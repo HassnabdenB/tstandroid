@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>حجز طاولة | Bianco Ristorante</title>
+<style>
+:root{color-scheme:dark;--bg:#11110f;--panel:#1c1b18;--line:#39362f;--text:#f7f1e7;--muted:#bdb5a7;--gold:#d8b875}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:26px 18px 20px;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#201e18,#11110f)}
+.brand{letter-spacing:3px;font-family:Georgia,serif;font-size:clamp(25px,5vw,39px);direction:ltr}.sub{color:var(--gold);letter-spacing:2px;font-size:12px;margin-top:8px}
+main{max-width:620px;margin:24px auto;padding:0 14px 36px}.intro{text-align:center;color:var(--muted);line-height:1.8}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:18px}
+h2{font-size:19px;margin:0 0 16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{margin-bottom:14px}label{display:block;font-size:14px;margin-bottom:7px;color:#e8dfd0}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:#11110f;color:var(--text);font:inherit;min-height:46px}
+input:focus,select:focus{outline:1px solid var(--gold);border-color:var(--gold)}
+button{width:100%;padding:13px 16px;background:var(--gold);color:#19150d;font:inherit;font-weight:750;border:0;border-radius:10px;cursor:pointer}
+button.secondary{background:#343027;color:var(--text);margin-top:10px}
+.note{font-size:12px;line-height:1.7;color:var(--muted);margin-top:14px}.result{display:none;margin-top:15px;border:1px solid #526b4a;background:#202b1e;padding:13px;border-radius:10px;line-height:1.8}.result.show{display:block}
+.ltr{direction:ltr;text-align:left}footer{text-align:center;color:#817a6e;font-size:12px;padding:20px}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.card{padding:16px}}
+</style></head>
+<body>
+<header><div class="brand">BIANCO</div><div class="sub">RISTORANTE · RESERVATIONS</div></header>
+<main>
+<p class="intro">احجز طاولتك في <strong>Bianco Ristorante</strong><br>واجهة تجريبية لتجهيز طلب الحجز.</p>
+<section class="card">
+<h2>تفاصيل الحجز</h2>
+<form id="booking">
+<div class="grid">
+<div class="field"><label for="guests">عدد الأشخاص</label><select id="guests" required><option value="1">شخص واحد</option><option value="2" selected>شخصان</option><option value="3">3 أشخاص</option><option value="4">4 أشخاص</option><option value="5">5 أشخاص</option><option value="6">6 أشخاص</option><option value="7">7 أشخاص</option><option value="8">8 أشخاص</option></select></div>
+<div class="field"><label for="date">تاريخ الحجز</label><input id="date" type="date" required></div>
+<div class="field"><label for="time">الوقت المفضّل</label><select id="time" required><option value="">اختر الوقت</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option><option>21:30</option></select></div>
+<div class="field"><label for="occasion">المناسبة (اختياري)</label><select id="occasion"><option>لا توجد مناسبة</option><option>عيد ميلاد</option><option>ذكرى سنوية</option><option>مناسبة خاصة</option></select></div>
+</div>
+<h2 style="margin-top:8px">بيانات التواصل</h2>
+<div class="field"><label for="name">الاسم</label><input id="name" autocomplete="name" placeholder="الاسم الكامل" required></div>
+<div class="field"><label for="phone">رقم الهاتف</label><input id="phone" type="tel" autocomplete="tel" placeholder="+20..." required></div>
+<div class="field"><label for="email">البريد الإلكتروني (اختياري)</label><input id="email" type="email" autocomplete="email" placeholder="name@example.com"></div>
+<button type="submit">متابعة طلب الحجز</button>
+<div id="result" class="result" role="status"></div>
+</form>
+<button class="secondary" id="official">فتح صفحة الحجز الرسمية</button>
+<p class="note">تنبيه: هذا نموذج واجهة فقط ولا يرسل حجزًا فعليًا ولا يتحقق من توافر الطاولات. لإتمام الحجز، استخدم صفحة SevenRooms الرسمية. لا تدخل بيانات حساسة هنا.</p>
+</section>
+</main><footer>Bianco Ristorante · Reservation UI demo</footer>
+<script>
+const date=document.getElementById('date');
+const today=new Date();date.min=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+date.value=date.min;
+document.getElementById('booking').addEventListener('submit',e=>{
+ e.preventDefault();
+ const data={name:document.getElementById('name').value.trim(),phone:document.getElementById('phone').value.trim(),guests:document.getElementById('guests').value,date:date.value,time:document.getElementById('time').value,occasion:document.getElementById('occasion').value,email:document.getElementById('email').value.trim()};
+ if(!data.name||!data.phone||!data.date||!data.time){return}
+ const out=document.getElementById('result');out.className='result show';
+ out.innerHTML='<strong>تم تجهيز ملخص طلبك — لم يتم إرسال الحجز.</strong><br>الاسم: '+escapeHtml(data.name)+'<br>عدد الأشخاص: '+data.guests+'<br>التاريخ: '+data.date+' · الوقت: '+data.time+'<br>الهاتف: '+escapeHtml(data.phone)+'<br><br>اضغط على زر صفحة الحجز الرسمية لإكمال الحجز هناك.';
+});
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('official').addEventListener('click',()=>window.open('https://www.sevenrooms.com/explore/biancoristorante/reservations/create/search','_blank','noopener'));
+</script></body></html>
